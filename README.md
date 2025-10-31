@@ -68,6 +68,91 @@ aeroclub-larissa/
    - Navigate to `http://localhost:8000` if using a local server
    - Or open the `index.html` file directly in your browser
 
+## 🌐 Deploy to GitHub Pages
+
+GitHub Pages allows you to host your website directly from your GitHub repository for free.
+
+### Method 1: Using GitHub Settings (Recommended)
+
+1. **Push your code to GitHub**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+2. **Enable GitHub Pages**
+   - Go to your repository on GitHub: `https://github.com/socmath/aeroclub-larissa`
+   - Click on **Settings** tab
+   - Scroll down to **Pages** section in the left sidebar
+   - Under **Source**, select **Deploy from a branch**
+   - Choose **main** branch and **/ (root)** folder
+   - Click **Save**
+
+3. **Access your website**
+   - Your site will be available at: `https://socmath.github.io/aeroclub-larissa`
+   - It may take a few minutes for the site to become available
+
+### Method 2: Using GitHub Actions (Advanced)
+
+Create `.github/workflows/pages.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+### Custom Domain (Optional)
+
+To use your own domain (e.g., `www.aeroclublarissa.gr`):
+
+1. Create a `CNAME` file in your repository root:
+   ```
+   www.aeroclublarissa.gr
+   ```
+
+2. Configure DNS with your domain provider:
+   - Add a CNAME record pointing to `socmath.github.io`
+   - Or add A records pointing to GitHub's IP addresses
+
+3. In GitHub Pages settings, enter your custom domain
+
+### 🔄 Automatic Updates
+
+Once set up, your website will automatically update whenever you push changes to the main branch!
+
 ## 📱 Features Overview
 
 ### Navigation
