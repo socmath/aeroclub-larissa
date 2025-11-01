@@ -166,12 +166,12 @@ function initContactForm() {
                 // Show loading state
                 const submitButton = this.querySelector('button[type="submit"]');
                 const originalText = submitButton.textContent;
-                submitButton.textContent = 'Sending...';
+                submitButton.textContent = 'Αποστολή...';
                 submitButton.classList.add('loading');
                 
                 // Simulate form submission (replace with actual form handling)
                 setTimeout(() => {
-                    showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
+                    showNotification('Το μήνυμα στάλθηκε επιτυχώς! Θα επικοινωνήσουμε μαζί σας σύντομα.', 'success');
                     this.reset();
                     submitButton.textContent = originalText;
                     submitButton.classList.remove('loading');
@@ -186,23 +186,23 @@ function validateForm(formData) {
     const errors = [];
     
     if (!formData.firstName || formData.firstName.trim().length < 2) {
-        errors.push('Please enter a valid first name');
+        errors.push('Παρακαλώ εισάγετε έγκυρο όνομα');
     }
     
     if (!formData.lastName || formData.lastName.trim().length < 2) {
-        errors.push('Please enter a valid last name');
+        errors.push('Παρακαλώ εισάγετε έγκυρο επώνυμο');
     }
     
     if (!formData.email || !isValidEmail(formData.email)) {
-        errors.push('Please enter a valid email address');
+        errors.push('Παρακαλώ εισάγετε έγκυρη διεύθυνση email');
     }
     
     if (!formData.service) {
-        errors.push('Please select a service');
+        errors.push('Παρακαλώ επιλέξτε υπηρεσία');
     }
     
     if (!formData.message || formData.message.trim().length < 10) {
-        errors.push('Please enter a message (at least 10 characters)');
+        errors.push('Παρακαλώ εισάγετε μήνυμα (τουλάχιστον 10 χαρακτήρες)');
     }
     
     if (errors.length > 0) {
@@ -352,17 +352,15 @@ function revealElement(element, delay = 0) {
     }, delay);
 }
 
-// Aircraft booking functionality (placeholder)
-function bookAircraft(aircraftName, price) {
-    const message = `I would like to book the ${aircraftName} at ${price}/hour. Please contact me with available times.`;
+// Contact form functionality (placeholder)
+function contactForInfo(subject) {
+    const message = `Θα ήθελα περισσότερες πληροφορίες για ${subject}. Παρακαλώ επικοινωνήστε μαζί μου.`;
     
     // Scroll to contact form and pre-fill message
     const contactForm = document.querySelector('.contact-form');
     const messageField = document.querySelector('#message');
-    const serviceField = document.querySelector('#service');
     
     if (contactForm && messageField) {
-        serviceField.value = 'rental';
         messageField.value = message;
         
         contactForm.scrollIntoView({ 
@@ -380,19 +378,14 @@ function bookAircraft(aircraftName, price) {
     }
 }
 
-// Add click handlers for aircraft booking buttons
+// Add click handlers for external links
 document.addEventListener('DOMContentLoaded', function() {
-    const bookingButtons = document.querySelectorAll('.aircraft-card .btn-outline');
+    const externalLinks = document.querySelectorAll('.link-item[target="_blank"]');
     
-    bookingButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const aircraftCard = this.closest('.aircraft-card');
-            const aircraftName = aircraftCard.querySelector('.aircraft-name').textContent;
-            const aircraftPrice = aircraftCard.querySelector('.aircraft-price').textContent;
-            
-            bookAircraft(aircraftName, aircraftPrice);
+    externalLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Links will open naturally due to target="_blank"
+            // Add any analytics or tracking here if needed
         });
     });
 });

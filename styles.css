@@ -606,6 +606,18 @@ section {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* Weather Section */
+.weather {
+    background: #f8fafc;
+}
+
+.weather-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
 /* Contact Section */
 .contact {
     background: #f8fafc;
