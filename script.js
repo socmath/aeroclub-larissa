@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initAnimations();
     initMobileMenu();
+    initWeatherWidget();
 });
 
 // Navigation functionality
@@ -447,4 +448,459 @@ if ('serviceWorker' in navigator) {
                 console.log('SW registration failed: ', registrationError);
             });
     });
+}
+
+// Weather Widget Integration
+function initWeatherWidget() {
+    fetchWeatherData();
+    
+    // Refresh data every 30 minutes
+    setInterval(fetchWeatherData, 30 * 60 * 1000);
+}
+
+async function fetchWeatherData() {
+    try {
+        // Use OpenMeteo for general weather data
+        await fetchFromOpenMeteoAPI();
+    } catch (error) {
+        console.error('Weather API failed:', error);
+        showWeatherFallback();
+    }
+}
+
+
+// OpenMeteo API for weather data
+async function fetchFromOpenMeteoAPI() {
+    try {
+        // Coordinates for Larissa Airport: 39.65, 22.465
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=39.65&longitude=22.465&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m,winddirection_10m,visibility,cloudcover&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum&timezone=Europe/Athens');
+        
+        if (response.ok) {
+            const data = await response.json();
+            displaySimpleWeatherData(data);
+        }
+    } catch (error) {
+        console.log('OpenMeteo API failed');
+        throw error;
+    }
+}
+
+
+// Display simplified weather data from OpenMeteo
+function displaySimpleWeatherData(data) {
+    const weatherElement = document.getElementById('weather-content');
+    const tafElement = document.getElementById('taf-content');
+    const timestamp = new Date().toLocaleString('el-GR');
+    
+    const current = data.current_weather;
+    const daily = data.daily;
+    const hourly = data.hourly;
+    
+    // Current conditions
+    const temp = Math.round(current.temperature);
+    const windSpeed = Math.round(current.windspeed);
+    const windDir = Math.round(current.winddirection);
+    const windSpeedKts = Math.round(current.windspeed * 1.94384); // m/s to knots
+    
+    // Today's forecast
+    const todayMax = Math.round(daily.temperature_2m_max[0]);
+    const todayMin = Math.round(daily.temperature_2m_min[0]);
+    const precipitation = daily.precipitation_sum[0];
+    const sunrise = new Date(daily.sunrise[0]).toLocaleTimeString('el-GR', {hour: '2-digit', minute: '2-digit'});
+    const sunset = new Date(daily.sunset[0]).toLocaleTimeString('el-GR', {hour: '2-digit', minute: '2-digit'});
+    
+    // Weather condition interpretation
+    const weatherCode = current.weathercode;
+    const weatherDescription = getWeatherDescription(weatherCode);
+    
+    weatherElement.innerHTML = `
+        <div class="weather-header">
+            <div class="weather-timestamp">
+                <i class="fas fa-clock"></i>
+                Ενημέρωση: ${timestamp}
+            </div>
+        </div>
+        
+        <div class="weather-current">
+            <div class="weather-main">
+                <div class="temperature-display">
+                    <span class="temp-current">${temp}°C</span>
+                    <div class="temp-range">
+                        <span class="temp-min">↓ ${todayMin}°</span>
+                        <span class="temp-max">↑ ${todayMax}°</span>
+                    </div>
+                </div>
+                <div class="weather-description">
+                    ${weatherDescription}
+                </div>
+            </div>
+            
+            <div class="weather-details">
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <i class="fas fa-wind"></i>
+                        <span class="label">Άνεμος</span>
+                        <span class="value">${windDir}° ${windSpeed} m/s (${windSpeedKts} kts)</span>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <i class="fas fa-eye"></i>
+                        <span class="label">Ορατότητα</span>
+                        <span class="value">Καλή</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-tint"></i>
+                        <span class="label">Βροχόπτωση</span>
+                        <span class="value">${precipitation} mm</span>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <i class="fas fa-sun"></i>
+                        <span class="label">Ανατολή</span>
+                        <span class="value">${sunrise}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-moon"></i>
+                        <span class="label">Δύση</span>
+                        <span class="value">${sunset}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="weather-source">
+            <i class="fas fa-info-circle"></i>
+            Πηγή: OpenMeteo Weather API (Γενικές καιρικές συνθήκες)
+        </div>
+    `;
+    
+    // METAR/TAF Link Section
+    tafElement.innerHTML = `    
+        <div class="aviation-links">
+            <a href="https://metar-taf.com/live/LGLR?zoom=79" target="_blank" class="metar-link">
+                <i class="fas fa-external-link-alt"></i>
+                <div class="link-info">
+                    <span class="link-title">METAR-TAF.com</span>
+                    <span class="link-desc">METAR/TAF για το αεροδρόμιο της Λάρισας (LGLR)</span>
+                </div>
+            </a>
+        </div>
+    `;
+    
+    // Update weather summary with basic VFR info
+    updateBasicWeatherSummary(data);
+}
+
+
+// Helper functions for CheckWX data
+function formatCheckWXWind(wind) {
+    if (!wind) return 'Άνεμος δεν αναφέρεται';
+    
+    const dir = wind.degrees || wind.direction;
+    const speed = wind.speed_kts || wind.speed;
+    
+    if (dir && speed) {
+        return `${dir}° στους ${speed} kts`;
+    }
+    return 'Άνεμος δεν διαθέσιμος';
+}
+
+function formatCheckWXVisibility(visibility) {
+    if (!visibility) return 'N/A';
+    
+    if (visibility.miles_float && visibility.miles_float >= 6) {
+        return '10+ km';
+    } else if (visibility.miles_float) {
+        return `${(visibility.miles_float * 1.609).toFixed(1)} km`;
+    }
+    
+    return 'Ορατότητα δεν διαθέσιμη';
+}
+
+// AVWX Data Formatting Functions
+function formatAVWXWind(metarData) {
+    if (metarData.wind_direction && metarData.wind_speed) {
+        const direction = metarData.wind_direction;
+        const speed = metarData.wind_speed;
+        const gust = metarData.wind_gust;
+        
+        let windStr = '';
+        
+        if (direction.repr === 'VRB' || direction.value === null) {
+            windStr = `Μεταβλητός στους ${speed.value || speed.repr} kts`;
+        } else {
+            windStr = `${direction.value || direction.repr}° στους ${speed.value || speed.repr} kts`;
+        }
+        
+        if (gust && gust.value) {
+            windStr += ` (ριπές ${gust.value} kts)`;
+        }
+        
+        return windStr;
+    }
+    return 'Άνεμος δεν αναφέρεται';
+}
+
+function formatAVWXVisibility(metarData) {
+    if (metarData.visibility) {
+        const vis = metarData.visibility;
+        if (vis.repr === 'CAVOK' || (vis.value && vis.value >= 9999)) {
+            return '10+ km (CAVOK)';
+        } else if (vis.value) {
+            // AVWX returns visibility in statute miles
+            const km = vis.value * 1.609344; // Convert miles to km
+            return `${km.toFixed(1)} km`;
+        }
+    }
+    return 'N/A';
+}
+
+function formatAVWXClouds(metarData) {
+    if (!metarData.clouds || metarData.clouds.length === 0) return 'Καθαρός ουρανός';
+    
+    const cloudTypes = {
+        'FEW': 'Λίγα νέφη',
+        'SCT': 'Διάσπαρτα νέφη', 
+        'BKN': 'Σπασμένα νέφη',
+        'OVC': 'Συνεχής νεφοκάλυψη'
+    };
+    
+    return metarData.clouds.map(cloud => {
+        const type = cloudTypes[cloud.type] || cloud.type;
+        const altitude = cloud.altitude ? `${cloud.altitude} ft` : '';
+        return `${type} ${altitude}`;
+    }).join(', ');
+}
+
+function formatAVWXTemperature(metarData) {
+    const temp = metarData.temperature;
+    const dewpoint = metarData.dewpoint;
+    
+    let tempStr = '';
+    if (temp && temp.celsius !== null) {
+        tempStr += `${temp.celsius}°C`;
+    }
+    if (dewpoint && dewpoint.celsius !== null) {
+        tempStr += ` / Σημείο δρόσου: ${dewpoint.celsius}°C`;
+    }
+    
+    return tempStr || 'N/A';
+}
+
+function formatAVWXPressure(metarData) {
+    if (metarData.altimeter && metarData.altimeter.hpa) {
+        return `${metarData.altimeter.hpa} hPa`;
+    } else if (metarData.altimeter && metarData.altimeter.value) {
+        // Convert inHg to hPa if needed
+        const hpa = Math.round(metarData.altimeter.value * 33.8639);
+        return `${hpa} hPa`;
+    }
+    return 'N/A';
+}
+
+function translateFlightRules(flightRules) {
+    const translations = {
+        'VFR': 'VFR - Οπτικές πτήσεις εφικτές',
+        'MVFR': 'MVFR - Οριακές VFR συνθήκες',
+        'IFR': 'IFR - Απαιτείται πτητικό σχέδιο',
+        'LIFR': 'LIFR - Χαμηλές IFR συνθήκες'
+    };
+    return translations[flightRules] || flightRules;
+}
+
+function getWeatherDescription(weatherCode) {
+    const descriptions = {
+        0: '<i class="fas fa-sun" style="color: #FFD700; font-size: 1.5em;"></i> Καθαρός ουρανός',
+        1: '<i class="fas fa-sun" style="color: #FFA500; font-size: 1.5em;"></i> Κυρίως καθαρός',
+        2: '<i class="fas fa-cloud-sun" style="color: #87CEEB; font-size: 1.5em;"></i> Μερικώς συννεφιασμένος',
+        3: '<i class="fas fa-cloud" style="color: #B0C4DE; font-size: 1.5em;"></i> Συννεφιασμένος',
+        45: '<i class="fas fa-smog" style="color: #A9A9A9; font-size: 1.5em;"></i> Ομίχλη',
+        48: '<i class="fas fa-smog" style="color: #778899; font-size: 1.5em;"></i> Παγωμένη ομίχλη',
+        51: '<i class="fas fa-cloud-drizzle" style="color: #4682B4; font-size: 1.5em;"></i> Ελαφριά ψιλή βροχή',
+        53: '<i class="fas fa-cloud-rain" style="color: #4169E1; font-size: 1.5em;"></i> Μέτρια ψιλή βροχή',
+        55: '<i class="fas fa-cloud-showers-heavy" style="color: #0000FF; font-size: 1.5em;"></i> Έντονη ψιλή βροχή',
+        61: '<i class="fas fa-cloud-rain" style="color: #4682B4; font-size: 1.5em;"></i> Ελαφριά βροχή',
+        63: '<i class="fas fa-cloud-rain" style="color: #4169E1; font-size: 1.5em;"></i> Μέτρια βροχή',
+        65: '<i class="fas fa-cloud-showers-heavy" style="color: #0000FF; font-size: 1.5em;"></i> Έντονη βροχή',
+        80: '<i class="fas fa-cloud-sun-rain" style="color: #6495ED; font-size: 1.5em;"></i> Ελαφριοί όμβροι',
+        81: '<i class="fas fa-cloud-showers-heavy" style="color: #4169E1; font-size: 1.5em;"></i> Μέτριοι όμβροι',
+        82: '<i class="fas fa-poo-storm" style="color: #800080; font-size: 1.5em;"></i> Έντονοι όμβροι',
+        95: '<i class="fas fa-bolt" style="color: #FFD700; font-size: 1.5em;"></i> Καταιγίδα',
+        96: '<i class="fas fa-bolt" style="color: #FF4500; font-size: 1.5em;"></i> Καταιγίδα με χαλάζι',
+        99: '<i class="fas fa-bolt" style="color: #DC143C; font-size: 1.5em;"></i> Έντονη καταιγίδα με χαλάζι'
+    };
+    return descriptions[weatherCode] || '<i class="fas fa-cloud-sun" style="color: #87CEEB; font-size: 1.5em;"></i> Μεταβλητές συνθήκες';
+}
+
+function updateBasicWeatherSummary(data) {
+    const summaryElement = document.getElementById('weather-summary');
+    const current = data.current_weather;
+    const daily = data.daily;
+    
+    const temp = Math.round(current.temperature);
+    const windSpeed = Math.round(current.windspeed * 1.94384); // m/s to knots
+    const sunrise = new Date(daily.sunrise[0]).toLocaleTimeString('el-GR', {hour: '2-digit', minute: '2-digit'});
+    const sunset = new Date(daily.sunset[0]).toLocaleTimeString('el-GR', {hour: '2-digit', minute: '2-digit'});
+    
+    // Calculate if it's daytime
+    const now = new Date();
+    const sunriseTime = new Date(daily.sunrise[0]);
+    const sunsetTime = new Date(daily.sunset[0]);
+    const isDaylight = now >= sunriseTime && now <= sunsetTime;
+    
+    // Basic VFR assessment
+    let vfrStatus = 'unknown';
+    let vfrText = 'Άγνωστο';
+    let vfrDetails = 'Χρησιμοποιήστε επίσημα METAR/TAF για ακριβή ανάλυση';
+    
+    if (!isDaylight) {
+        vfrStatus = 'night';
+        vfrText = 'Μη Εφικτές (Νύχτα)';
+        vfrDetails = `Νυχτερινές συνθήκες - VFR δεν επιτρέπονται μετά τη δύση (${sunset})`;
+    } else if (windSpeed > 25) {
+        vfrStatus = 'marginal';
+        vfrText = 'Οριακές';
+        vfrDetails = 'Ισχυροί άνεμοι - Προσοχή για VFR πτήσεις';
+    } else {
+        vfrStatus = 'check-required';
+        vfrText = 'Απαιτείται Έλεγχος';
+        vfrDetails = 'Ελέγξτε επίσημα METAR/TAF για ορατότητα και νεφοκάλυψη';
+    }
+    
+    summaryElement.innerHTML = `
+        <div class="vfr-status-basic ${vfrStatus}">
+            <div class="vfr-status-header">
+                <i class="fas ${isDaylight ? 'fa-sun' : 'fa-moon'}"></i>
+                <span class="vfr-status-title">VFR Πτήσεις</span>
+            </div>
+            <div class="vfr-status-result">${vfrText}</div>
+            <div class="vfr-status-details">${vfrDetails}</div>
+        </div>
+        <!--
+        <div class="basic-conditions">
+            <div class="condition-item">
+                <i class="fas fa-thermometer-half"></i>
+                <span class="label">Θερμοκρασία:</span>
+                <span class="value">${temp}°C</span>
+            </div>
+            <div class="condition-item">
+                <i class="fas fa-wind"></i>
+                <span class="label">Άνεμος:</span>
+                <span class="value">${windSpeed} kts</span>
+            </div>
+            <div class="condition-item">
+                <i class="fas fa-sun"></i>
+                <span class="label">Ανατολή:</span>
+                <span class="value">${sunrise}</span>
+            </div>
+            <div class="condition-item">
+                <i class="fas fa-moon"></i>
+                <span class="label">Δύση:</span>
+                <span class="value">${sunset}</span>
+            </div>
+        </div>
+        
+        <div class="important-notice">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Σημαντικό:</strong> Για επίσημη αξιολόγηση VFR/IFR, χρησιμοποιήστε πάντα επίσημα METAR/TAF δεδομένα.
+        </div>
+        -->
+        
+    `;
+}
+
+function formatWind(direction, speed, gust) {
+    if (!direction || !speed) return 'Άνεμος δεν αναφέρεται';
+    
+    let windStr = `${direction.value}° στους ${speed.value} kts`;
+    if (gust && gust.value) {
+        windStr += ` (ριπές ${gust.value} kts)`;
+    }
+    if (direction.repr === 'VRB') {
+        windStr = `Μεταβλητός στους ${speed.value} kts`;
+    }
+    return windStr;
+}
+
+function formatVisibility(visibility) {
+    if (!visibility) return 'N/A';
+    
+    if (visibility.repr === 'CAVOK' || visibility.value >= 9999) {
+        return '10+ km (CAVOK)';
+    }
+    
+    const km = visibility.value / 1000;
+    return `${km.toFixed(1)} km`;
+}
+
+function formatClouds(clouds) {
+    if (!clouds || clouds.length === 0) return 'Καθαρός ουρανός';
+    
+    const cloudTypes = {
+        'FEW': 'Λίγα νέφη',
+        'SCT': 'Διάσπαρτα νέφη',
+        'BKN': 'Σπασμένα νέφη',
+        'OVC': 'Συνεχής νεφοκάλυψη'
+    };
+    
+    return clouds.map(cloud => {
+        const type = cloudTypes[cloud.type] || cloud.type;
+        const altitude = cloud.altitude ? `${cloud.altitude} ft` : '';
+        return `${type} ${altitude}`;
+    }).join(', ');
+}
+
+function formatTAFTime(timeStr) {
+    if (!timeStr) return 'N/A';
+    
+    const date = new Date(timeStr + 'Z');
+    return date.toLocaleString('el-GR', {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+        timeZoneName: 'short'
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+function showWeatherFallback() {
+    const weatherCurrentElement = document.getElementById('weather-current');
+    
+    const fallbackContent = `
+        <div class="weather-fallback">
+            <div class="fallback-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4>Καιρικά δεδομένα δεν διαθέσιμα</h4>
+            </div>
+            <div class="fallback-message">
+                <p>Για επίσημα αεροναυτικά δεδομένα METAR/TAF:</p>
+                <a href="https://metar-taf.com/live/LGLR?zoom=79" target="_blank" class="metar-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    <div class="link-info">
+                        <span class="link-title">METAR-TAF.com</span>
+                        <span class="link-desc">Επίσημα δεδομένα για LGLR</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    `;
+    
+    if (weatherCurrentElement) {
+        weatherCurrentElement.innerHTML = fallbackContent;
+    }
 }
