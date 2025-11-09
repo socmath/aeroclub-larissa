@@ -19,7 +19,22 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 16px;
+}
+
+.container-banner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    background-color: #00000060;
+    border-radius: 8px;
+    width: 320px;
+}
+
+.container-text {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 /* Typography */
@@ -130,8 +145,17 @@ p {
     color: #1e40af;
 }
 
+.nav-logo-text {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.1;
+    word-break: break-word;
+    hyphens: auto;
+    max-width: 120px;
+}
+
 .logo {
-    height: 40px;
+    height: 72px;
     width: auto;
 }
 
@@ -238,23 +262,23 @@ p {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 1.5rem;
-    line-height: 1.1;
 }
 
 .highlight {
     color: #60a5fa;
 }
 
+.hero-aircraft-icon {
+    max-width: 75%;
+    height: 96px;
+    margin-bottom: -4px;
+
+}
+
 .hero-subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0.9;
+    font-size: 16px;
 }
 
 .hero-cta {
@@ -602,8 +626,130 @@ section {
 
 .about-image img {
     width: 100%;
-    border-radius: 12px;
+    border-radius: 2px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.stacked-photos {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.stacked-photo {
+    position: absolute;
+    width: 200px;
+    height: 180px;
+    border: 6px solid white;
+    border-bottom: 12px solid white;
+    border-radius: 2px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    transition: transform 0.3s ease, z-index 0.3s ease;
+}
+
+.stacked-photo:hover {
+    transform: translateY(-10px) scale(1.05);
+    z-index: 10;
+}
+
+.photo-1 {
+    top: 0;
+    left: 0;
+    transform: rotate(-8deg);
+    z-index: 4;
+}
+
+.photo-2 {
+    top: 40px;
+    left: 60px;
+    transform: rotate(5deg);
+    z-index: 3;
+}
+
+.photo-3 {
+    top: 80px;
+    left: 20px;
+    transform: rotate(-3deg);
+    z-index: 2;
+}
+
+.photo-4 {
+    top: 120px;
+    left: 80px;
+    transform: rotate(7deg);
+    z-index: 1;
+}
+
+.photo-5 {
+    top: 10px;
+    left: 40px;
+    transform: rotate(-12deg);
+    z-index: 5;
+}
+
+.photo-6 {
+    top: 50px;
+    left: 10px;
+    transform: rotate(8deg);
+    z-index: 6;
+}
+
+.photo-7 {
+    top: 90px;
+    left: 70px;
+    transform: rotate(-4deg);
+    z-index: 7;
+}
+
+.photo-8 {
+    top: 130px;
+    left: 30px;
+    transform: rotate(11deg);
+    z-index: 8;
+}
+
+.photo-9 {
+    top: 20px;
+    left: 90px;
+    transform: rotate(-15deg);
+    z-index: 9;
+}
+
+.photo-10 {
+    top: 60px;
+    left: 50px;
+    transform: rotate(6deg);
+    z-index: 10;
+}
+
+.photo-11 {
+    top: 100px;
+    left: 0px;
+    transform: rotate(-9deg);
+    z-index: 11;
+}
+
+.photo-12 {
+    top: 140px;
+    left: 60px;
+    transform: rotate(4deg);
+    z-index: 12;
+}
+
+.photo-13 {
+    top: 30px;
+    left: 20px;
+    transform: rotate(-6deg);
+    z-index: 13;
+}
+
+.photo-14 {
+    top: 70px;
+    left: 100px;
+    transform: rotate(9deg);
+    z-index: 14;
 }
 
 /* Weather Section */
@@ -2377,7 +2523,7 @@ section {
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 24px;
     }
     
     .hero-cta {
@@ -2431,19 +2577,24 @@ section {
         padding: 1.5rem;
         margin: 0 1rem;
     }
+
+    .container {
+        padding: 0;
+    }
+
+    .container-text {
+        padding: 0 1rem;
+    }
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 0 15px;
-    }
     
     section {
         padding: 3rem 0;
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 24px;
     }
     
     .section-title {
