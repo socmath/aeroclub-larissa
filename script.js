@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
     initMobileMenu();
     initWeatherWidget();
+    initPhotoGallery();
 });
 
 // Navigation functionality
@@ -902,5 +903,52 @@ function showWeatherFallback() {
     
     if (weatherCurrentElement) {
         weatherCurrentElement.innerHTML = fallbackContent;
+    }
+}
+
+// Photo Gallery functionality
+function initPhotoGallery() {
+    // Check if Fancybox is loaded
+    if (typeof Fancybox !== 'undefined') {
+        // Initialize Fancybox with custom options
+        Fancybox.bind("[data-fancybox='gallery']", {
+            // UI options
+            Toolbar: {
+                display: {
+                    left: ["infobar"],
+                    middle: [],
+                    right: ["slideshow", "thumbs", "close"]
+                }
+            },
+            
+            // Thumbnails
+            Thumbs: {
+                autoStart: false,   // Don't show thumbs by default
+                axis: "x"          // Horizontal thumbnail strip
+            },
+            
+            // Navigation
+            Carousel: {
+                infinite: true,     // Loop through images
+                preload: 3         // Preload next/previous images
+            },
+            
+            // Animation
+            showClass: "f-fadeIn",
+            hideClass: "f-fadeOut",
+            
+            // Custom options
+            dragToClose: true,
+            wheel: "zoom",
+            
+            // Captions
+            caption: function (fancybox, slide) {
+                return slide.caption || slide.alt || "";
+            }
+        });
+        
+        console.log("Photo gallery initialized successfully!");
+    } else {
+        console.warn("Fancybox library not loaded. Photo gallery will not work.");
     }
 }
