@@ -383,11 +383,35 @@ function contactForInfo(subject) {
 // Add click handlers for external links
 document.addEventListener('DOMContentLoaded', function() {
     const externalLinks = document.querySelectorAll('.link-item[target="_blank"]');
+    const openTabs = new Map(); // Store references to opened tabs by URL
     
     externalLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            // Links will open naturally due to target="_blank"
-            // Add any analytics or tracking here if needed
+            e.preventDefault(); // Prevent default behavior
+            
+            const url = this.href;
+            const linkName = this.querySelector('.link-name')?.textContent || 'External Link';
+            
+            // Check if we already have a tab open for this URL
+            if (openTabs.has(url)) {
+                const existingTab = openTabs.get(url);
+                
+                // Check if the tab is still open and focus it
+                if (existingTab && !existingTab.closed) {
+                    existingTab.focus();
+                    console.log('Focusing existing tab for:', linkName);
+                } else {
+                    // Tab was closed, open a new one
+                    const newTab = window.open(url, '_blank');
+                    openTabs.set(url, newTab);
+                    console.log('Reopening tab for:', linkName);
+                }
+            } else {
+                // Open new tab and store reference
+                const newTab = window.open(url, '_blank');
+                openTabs.set(url, newTab);
+                console.log('Opening new tab for:', linkName);
+            }
         });
     });
 });
