@@ -2403,12 +2403,15 @@ section {
 }
 
 .footer-logo img {
-    height: 40px;
-    filter: brightness(0) invert(1);
+    height: 60px;
 }
 
 .footer-logo-text {
-    font-size: 1.5rem;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.0rem;
+    word-break: break-word;
+    hyphens: auto;
+    max-width: 120px;
     font-weight: 700;
     color: white;
 }
