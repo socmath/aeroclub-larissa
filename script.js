@@ -390,7 +390,23 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault(); // Prevent default behavior
             
             const url = this.href;
-            const linkName = this.querySelector('.link-name')?.textContent || 'External Link';
+            const linkName = this.classList.contains('link-name') 
+                ? (this.textContent || this.href) 
+                : (this.querySelector('.link-name')?.textContent || 'External Link');
+            
+            // Special handling for Facebook and other social media sites that block tab management
+            const isFacebook = url.includes('facebook.com');
+            const isBlockedSite = isFacebook || url.includes('twitter.com') || url.includes('instagram.com');
+            
+            if (isBlockedSite) {
+                // For blocked sites, we can't reliably manage tabs, so we use a simpler approach
+                console.log('Opening social media link (tab management limited):', linkName);
+                window.open(url, '_blank');
+                return;
+            }
+            
+            // Create a unique window name based on the URL for other sites
+            const windowName = 'external_' + btoa(url).replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
             
             // Check if we already have a tab open for this URL
             if (openTabs.has(url)) {
@@ -402,13 +418,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Focusing existing tab for:', linkName);
                 } else {
                     // Tab was closed, open a new one
-                    const newTab = window.open(url, '_blank');
+                    const newTab = window.open(url, windowName);
                     openTabs.set(url, newTab);
                     console.log('Reopening tab for:', linkName);
                 }
             } else {
                 // Open new tab and store reference
-                const newTab = window.open(url, '_blank');
+                const newTab = window.open(url, windowName);
                 openTabs.set(url, newTab);
                 console.log('Opening new tab for:', linkName);
             }
@@ -514,7 +530,6 @@ async function fetchFromOpenMeteoAPI() {
 // Display simplified weather data from OpenMeteo
 function displaySimpleWeatherData(data) {
     const weatherElement = document.getElementById('weather-content');
-    const tafElement = document.getElementById('taf-content');
     const timestamp = new Date().toLocaleString('el-GR');
     
     const current = data.current_weather;
@@ -600,19 +615,6 @@ function displaySimpleWeatherData(data) {
         <div class="weather-source">
             <i class="fas fa-info-circle"></i>
             Πηγή: OpenMeteo Weather API (Γενικές καιρικές συνθήκες)
-        </div>
-    `;
-    
-    // METAR/TAF Link Section
-    tafElement.innerHTML = `    
-        <div class="aviation-links">
-            <a href="https://metar-taf.com/live/LGLR?zoom=79" target="_blank" class="metar-link">
-                <i class="fas fa-external-link-alt"></i>
-                <div class="link-info">
-                    <span class="link-title">METAR-TAF.com</span>
-                    <span class="link-desc">METAR/TAF για το αεροδρόμιο της Λάρισας (LGLR)</span>
-                </div>
-            </a>
         </div>
     `;
     

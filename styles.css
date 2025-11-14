@@ -1006,6 +1006,11 @@ section {
     margin-bottom: 1em;
 }
 
+.metar-icon {
+    width: 32px;
+    margin: 0 4px;
+}
+
 /* Vertical list styles */
 .category-links.vertical-list {
     list-style: none;
@@ -1160,7 +1165,7 @@ section {
 
 .links .category-links.vertical-list .fa-external-link-alt {
     color: #9ca3af;
-    font-size: 0.875rem;
+    font-size: 1rem;
     margin-left: 0.5rem;
     transition: color 0.3s ease;
 }
@@ -1501,7 +1506,8 @@ section {
 
 .metar-link i {
     color: #3b82f6;
-    font-size: 1.25rem;
+    font-size: 1rem;
+    margin-left: auto;
 }
 
 .link-info {
