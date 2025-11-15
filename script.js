@@ -100,7 +100,7 @@ function initCopyEmail() {
                 }
 
                 const isEmail = val.includes('@');
-                showNotification(isEmail ? 'Διεύθυνση email αντιγράφηκε στο πρόχειρο.' : 'Αριθμός τηλεφώνου αντιγράφηκε στο πρόχειρο.', 'success');
+                showNotification(isEmail ? 'Η διεύθυνση email αντιγράφηκε στο πρόχειρο.' : 'Ο αριθμός τηλεφώνου αντιγράφηκε στο πρόχειρο.', 'success');
 
                 // temporary visual feedback
                 const originalHTML = this.innerHTML;
@@ -271,11 +271,8 @@ function showNotification(message, type = 'info') {
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
-            <span class="notification-icon">
-                ${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}
-            </span>
             <span class="notification-message">${message}</span>
-            <button class="notification-close">&times;</button>
+            <button class="btn-close">&times;</button>
         </div>
     `;
     
@@ -285,11 +282,12 @@ function showNotification(message, type = 'info') {
         top: 100px;
         right: 20px;
         z-index: 10000;
-        max-width: 400px;
-        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#2563eb'};
+        width: 272px;
+        background: ${type === 'success' ? '#00000080' : type === 'error' ? '#ef4444' : '#2563eb'};
         color: white;
         padding: 1rem;
         border-radius: 8px;
+        text-align: center;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         transform: translateX(100%);
         transition: transform 0.3s ease;
@@ -303,7 +301,7 @@ function showNotification(message, type = 'info') {
     }, 100);
     
     // Close functionality
-    const closeButton = notification.querySelector('.notification-close');
+    const closeButton = notification.querySelector('.btn-close');
     closeButton.addEventListener('click', () => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => notification.remove(), 300);

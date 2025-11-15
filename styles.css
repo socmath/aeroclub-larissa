@@ -111,6 +111,22 @@ p {
     transform: translateY(-2px);
 }
 
+.btn-close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
 /* Header */
 .header {
     position: fixed;
