@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavigation();
     initScrollEffects();
     initContactForm();
+    initCopyEmail();
     initAnimations();
     initMobileMenu();
     initWeatherWidget();
@@ -72,6 +73,42 @@ function initNavigation() {
             if (navMenu.classList.contains('active')) {
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
+            }
+        });
+    });
+}
+
+// Copy contact values (email/phone) to clipboard
+function initCopyEmail() {
+    const buttons = document.querySelectorAll('.copy-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const val = this.dataset.copy || this.dataset.email || this.closest('.contact-details')?.querySelector('.contact-value')?.textContent?.trim();
+            if (!val) return;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(val);
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = val;
+                    ta.style.position = 'fixed';
+                    ta.style.left = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                }
+
+                const isEmail = val.includes('@');
+                showNotification(isEmail ? 'Διεύθυνση email αντιγράφηκε στο πρόχειρο.' : 'Αριθμός τηλεφώνου αντιγράφηκε στο πρόχειρο.', 'success');
+
+                // temporary visual feedback
+                const originalHTML = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i>';
+                setTimeout(() => { this.innerHTML = originalHTML; }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+                showNotification('Δεν ήταν δυνατή η αντιγραφή. Αντιγράψτε χειροκίνητα.', 'error');
             }
         });
     });

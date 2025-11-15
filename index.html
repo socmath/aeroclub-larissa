@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Αερολέσχη Λάρισας - Πτήσεις ΥΠΑΜ και αερομοντελισμός</title>
     <!-- Meta tags -->
-    <meta name="description" content="Αερολέσχη Λάρισας - Επαγγελματική εκπαίδευση χειριστών, ενοικίαση αεροσκαφών και αεροπορικές υπηρεσίες στη Λάρισα, Ελλάδα">
+    <meta name="description" content="Αερολέσχη Λάρισας - εκπαίδευση χειριστών, ενοικίαση αεροσκαφών και αεροπορικές υπηρεσίες στη Λάρισα, Ελλάδα">
     <meta name="keywords" content="σχολή χειριστών, εκπαίδευση χειριστών, ενοικίαση αεροσκαφών, αεροπορία, Λάρισα, Ελλάδα, μαθήματα πτήσης">
     <meta name="author" content="Αερολέσχη Λάρισας">
     <!-- CSS -->
@@ -34,7 +34,7 @@
                     <div class="nav-logo-text">ΑΕΡΟΛΕΣΧΗ ΛΑΡΙΣΑΣ</div>
                 </div>
                 
-                <ul class="nav-menu">
+                <ul class="nav-menu" style="margin-right: 16px;">
                     <li class="nav-item">
                         <a href="#home" class="nav-link">Αρχική</a>
                     </li>
@@ -51,10 +51,6 @@
                         <a href="#contact" class="nav-link">Επικοινωνία</a>
                     </li>
                 </ul>
-                
-                <div class="nav-cta">
-                    <a href="#contact" class="btn-primary">Κλείσε Πτήση</a>
-                </div>
                 
                 <div class="hamburger">
                     <span class="bar"></span>
@@ -75,42 +71,9 @@
         
         <div class="hero-content">
             <div class="container-banner">
-                <!--
-                <div class="hero-title"><i class="fas fa-plane"></i> Πετάξτε μαζί μας!</div>
-                -->
                 <div class="hero-title">ΠΕΤΑΞΤΕ ΜΑΖΙ ΜΑΣ</div>
-
                 <img src="assets/savannah.svg" alt="Savannah Aircraft" class="hero-aircraft-icon">
-                
-
                 <div class="hero-subtitle">Κάντε το όνειρό σας πραγματικότητα με την Αερολέσχη Λάρισας</div>
-                <!-- <div class="hero-subtitle">ΚΑΝΤΕ ΤΟ ΟΝΕΙΡΟ ΣΑΣ ΠΡΑΓΜΑΤΙΚΟΤΗΤΑ ΜΕ ΤΗΝ ΑΕΡΟΛΕΣΧΗ ΛΑΡΙΣΑΣ</div> -->
-
-                <!--
-                <div class="hero-cta">
-                    <a href="#about" class="btn-primary">Ξεκινήστε το Ταξίδι σας</a>
-                    <a href="#contact" class="btn-secondary">
-                        <i class="fas fa-play"></i>
-                        Επικοινωνήστε μαζί μας
-                    </a>
-                </div>
-                
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">Εκπαιδευμένοι Πιλότοι</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">15+</span>
-                        <span class="stat-label">Στόλος Αεροσκαφών</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">25+</span>
-                        <span class="stat-label">Χρόνια Εμπειρίας</span>
-                    </div>
-                </div>
-                -->
-                
             </div>
         </div>
     </section>
@@ -401,7 +364,6 @@
         <div class="container-text">
             <div class="section-header">
                 <h2 class="section-title">Επικοινωνία</h2>
-                <p class="section-subtitle">Έτοιμοι να ξεκινήσετε το αεροπορικό σας ταξίδι; Επικοινωνήστε μαζί μας σήμερα</p>
             </div>
             
             <div class="contact-content">
@@ -412,7 +374,7 @@
                         </div>
                         <div class="contact-details">
                             <h4>Τοποθεσία</h4>
-                            <p>Αεροδρόμιο Λάρισας<br>41500 Λάρισα, Ελλάδα</p>
+                            <p>Πεδίο Τερψιθέας<br>41500 Λάρισα</p>
                         </div>
                     </div>
                     
@@ -422,7 +384,12 @@
                         </div>
                         <div class="contact-details">
                             <h4>Τηλέφωνο</h4>
-                            <p>+30 2410 123456</p>
+                            <p class="contact-line">
+                                <span class="contact-value">+30 2410 123456</span>
+                                <button type="button" class="copy-btn" data-copy="+30 2410 123456" aria-label="Copy phone" title="Αντιγραφή τηλεφώνου">
+                                    <i class="fas fa-copy" aria-hidden="true"></i>
+                                </button>
+                            </p>
                         </div>
                     </div>
                     
@@ -431,12 +398,17 @@
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="contact-details">
-                            <h4>Email</h4>
-                            <p>airclublarissas@gmail.com</p>
-                        </div>
+                                <h4>Email</h4>
+                                <p class="contact-line">
+                                    <span class="contact-value">airclublarissas@gmail.com</span>
+                                    <button type="button" class="copy-btn" data-copy="airclublarissas@gmail.com" aria-label="Copy email" title="Αντιγραφή email">
+                                        <i class="fas fa-copy" aria-hidden="true"></i>
+                                    </button>
+                                </p>
+                            </div>
                     </div>
                     
-                    <div class="contact-item">
+                    <div class="contact-item" style="display: none;">
                         <div class="contact-icon">
                             <i class="fas fa-clock"></i>
                         </div>
@@ -447,49 +419,19 @@
                     </div>
                 </div>
                 
-                <form class="contact-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Όνομα</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Επώνυμο</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
+                <div class="map-container">
+                    <div class="map-wrapper">
+                        <iframe
+                            src="https://maps.google.com/maps?q=39.6552,22.3408&z=15&output=embed"
+                            frameborder="0"
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                            allowfullscreen=""
+                            aria-hidden="false"
+                            tabindex="0"
+                            title="Google Map - Aeroclub Larissa (39.6552, 22.3408)">
+                        </iframe>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Τηλέφωνο</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="service">Ενδιαφέρον για Υπηρεσία</label>
-                        <select id="service" name="service" required>
-                            <option value="">Επιλέξτε υπηρεσία</option>
-                            <option value="ppl">Άδεια Ιδιωτικού Πιλότου</option>
-                            <option value="cpl">Άδεια Εμπορικού Πιλότου</option>
-                            <option value="ir">Αξιολόγηση Οργάνων</option>
-                            <option value="rental">Ενοικίαση Αεροσκάφους</option>
-                            <option value="scenic">Τουριστική Πτήση</option>
-                            <option value="maintenance">Υπηρεσία Συντήρησης</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">Μήνυμα</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Πείτε μας για τους αεροπορικούς σας στόχους..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn-primary">Αποστολή Μηνύματος</button>
-                </form>
+                </div>
             </div>
         </div>
     </section>
