@@ -31,9 +31,12 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 16px;
-    background-color: #00000060;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 8px;
     width: 320px;
+    box-shadow: 0px 0px 16px 4px #00000020;
 }
 
 /* Banner wrapper and collapsed behaviour */
@@ -42,7 +45,7 @@ body {
     width: 100%;
     display: block;
     contain: layout;
-    min-height: 180px;
+    height: 64px;
 }
 
 .container-banner {
@@ -376,6 +379,12 @@ p {
 .hero-title {
     font-size: 24px;
     font-weight: 700;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    opacity: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 
+                 0 4px 8px rgba(0, 0, 0, 0.6),
+                 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 .highlight {
@@ -391,6 +400,12 @@ p {
 
 .hero-subtitle {
     font-size: 16px;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    opacity: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 
+                 0 4px 8px rgba(0, 0, 0, 0.6),
+                 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 .hero-cta {
