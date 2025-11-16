@@ -580,20 +580,20 @@ function initBannerToggle() {
     const banner = document.querySelector('.container-banner');
     if (!banner) return;
 
+    const bannerContent = banner.querySelector('.banner-content');
     const closeBtn = banner.querySelector('.btn-close');
-
     const handle = banner.querySelector('.banner-handle');
 
     function expand() {
         banner.classList.remove('banner-collapsed');
-        banner.setAttribute('aria-hidden', 'false');
+        if (bannerContent) bannerContent.removeAttribute('inert');
         banner.setAttribute('aria-expanded', 'true');
         try { localStorage.setItem('bannerCollapsed', 'false'); } catch (e) {}
     }
 
     function collapse() {
         banner.classList.add('banner-collapsed');
-        banner.setAttribute('aria-hidden', 'true');
+        if (bannerContent) bannerContent.setAttribute('inert', '');
         banner.setAttribute('aria-expanded', 'false');
         try { localStorage.setItem('bannerCollapsed', 'true'); } catch (e) {}
     }
