@@ -763,6 +763,7 @@ section {
     height: 300px;
     margin: 0 auto;
     transform: translateX(-24px);
+    cursor: pointer;
 }
 
 .stacked-photos a {
@@ -889,6 +890,20 @@ section {
     left: 100px;
     transform: rotate(9deg);
     z-index: 14;
+}
+
+.photo-hint {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: -1rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.photo-hint i {
+    color: #2563eb;
+    margin-right: 0.5rem;
 }
 
 /* Weather Section */
