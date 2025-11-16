@@ -655,7 +655,7 @@ window.addEventListener('error', function(e) {
 });
 
 // Service Worker registration (for PWA capabilities)
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
