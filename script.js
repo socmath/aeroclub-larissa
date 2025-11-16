@@ -127,9 +127,9 @@ function initMobileMenu() {
         // Animate hamburger
         const bars = hamburger.querySelectorAll('.bar');
         if (hamburger.classList.contains('active')) {
-            bars[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
+            bars[0].style.transform = 'rotate(-45deg) translate(-4px, 6px)';
             bars[1].style.opacity = '0';
-            bars[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+            bars[2].style.transform = 'rotate(45deg) translate(-4px, -6px)';
         } else {
             bars[0].style.transform = 'none';
             bars[1].style.opacity = '1';
