@@ -1,3 +1,54 @@
+// Helper function to get appropriate zoom level based on screen size
+function getMetarZoomLevel() {
+    const width = window.innerWidth;
+    if (width < 480) return 50;      // Mobile phones
+    if (width < 768) return 60;      // Small tablets
+    if (width < 1024) return 70;     // Tablets
+    return 79;                        // Desktop
+}
+
+// Track last access time for metar-taf live page
+let lastMetarLiveAccess = null;
+const METAR_LIVE_COOLDOWN = 60 * 60 * 1000; // 1 hour in milliseconds
+let metarLinksInitialized = false; // Prevent duplicate event listeners
+
+// Helper function to update metar-taf links with dynamic zoom and targets
+function updateMetarLinks() {
+    const zoom = getMetarZoomLevel();
+    
+    // Update live LGLR links with specific target and cooldown check
+    const metarLiveLinks = document.querySelectorAll('a[href*="metar-taf.com/live/LGLR"]');
+    metarLiveLinks.forEach(link => {
+        link.href = `https://metar-taf.com/live/LGLR?zoom=${zoom}`;
+        link.target = 'metar_live_window';
+        
+        // Only add event listener once
+        if (!metarLinksInitialized) {
+            link.addEventListener('click', function(e) {
+                const now = Date.now();
+                if (lastMetarLiveAccess && (now - lastMetarLiveAccess) < METAR_LIVE_COOLDOWN) {
+                    // Within cooldown period - just focus existing window without refreshing
+                    e.preventDefault();
+                    const existingWindow = window.open('', 'metar_live_window');
+                    if (existingWindow && !existingWindow.closed) {
+                        existingWindow.focus();
+                    }
+                    return false;
+                }
+                lastMetarLiveAccess = now;
+            });
+        }
+    });
+    
+    // Update general metar-taf.com links with different target
+    const metarGeneralLinks = document.querySelectorAll('a[href="https://metar-taf.com/"]');
+    metarGeneralLinks.forEach(link => {
+        link.target = 'metar_general_window';
+    });
+    
+    metarLinksInitialized = true;
+}
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
@@ -10,6 +61,22 @@ document.addEventListener('DOMContentLoaded', function() {
     initWeatherWidget();
     initPhotoGallery();
     initBannerToggle();
+    updateMetarLinks();
+});
+
+// Update zoom on window resize
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    // Debounce resize events to avoid multiple calls
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        // Only update href, don't re-add event listeners
+        const zoom = getMetarZoomLevel();
+        const metarLiveLinks = document.querySelectorAll('a[href*="metar-taf.com/live/LGLR"]');
+        metarLiveLinks.forEach(link => {
+            link.href = `https://metar-taf.com/live/LGLR?zoom=${zoom}`;
+        });
+    }, 250);
 });
 
 // Navigation functionality
@@ -1005,15 +1072,6 @@ function formatTAFTime(timeStr) {
 }
 
 
-
-
-
-
-
-
-
-
-
 function showWeatherFallback() {
     const weatherCurrentElement = document.getElementById('weather-current');
     
@@ -1025,7 +1083,7 @@ function showWeatherFallback() {
             </div>
             <div class="fallback-message">
                 <p>Για επίσημα αεροναυτικά δεδομένα METAR/TAF:</p>
-                <a href="https://metar-taf.com/live/LGLR?zoom=79" target="_blank" class="metar-link">
+                <a href="https://metar-taf.com/live/LGLR?zoom=79" target="metar_taf_window" class="metar-link">
                     <i class="fas fa-external-link-alt"></i>
                     <div class="link-info">
                         <span class="link-title">METAR-TAF.com</span>
