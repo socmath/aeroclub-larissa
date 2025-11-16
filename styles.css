@@ -31,6 +31,90 @@ body {
     width: 320px;
 }
 
+/* Banner wrapper and collapsed behaviour */
+.banner-wrapper {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
+.container-banner {
+    /* Positioning to allow sliding to the right while centered initially */
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    transform: translateX(-50%);
+    transition: left 0.45s cubic-bezier(.2,.9,.2,1), transform 0.45s cubic-bezier(.2,.9,.2,1);
+    z-index: 5;
+    cursor: default;
+}
+
+/* When collapsed: move the banner to the right so only a small part remains visible (40px) */
+.container-banner.banner-collapsed {
+    left: 100%;
+    transform: translateX(-40px);
+    cursor: pointer;
+}
+
+/* Hide the title and subtitle text when the banner is collapsed to avoid clipped text */
+.container-banner.banner-collapsed .hero-title,
+.container-banner.banner-collapsed .hero-subtitle {
+    display: none !important;
+    visibility: hidden;
+}
+
+/* Slight visual tweak for the close button inside the banner */
+.container-banner .btn-close {
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+/* Improve the visible small part when collapsed (accessibility) */
+.container-banner.banner-collapsed:focus, .container-banner.banner-collapsed:hover {
+    transform: translateX(-36px);
+}
+
+/* Slim handle that remains visible when banner is collapsed */
+.banner-handle {
+    position: absolute;
+    left: 0; /* leftmost part of banner will be visible when collapsed */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 88px;
+    display: none; /* only show when collapsed */
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px 0 0 8px;
+    color: white;
+    z-index: 6;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.banner-handle i {
+    font-size: 18px;
+}
+
+/* Show the handle only when the banner is collapsed */
+.container-banner.banner-collapsed .banner-handle {
+    display: flex;
+}
+
+/* Slight hover/tap feedback for handle */
+.container-banner.banner-collapsed .banner-handle:hover {
+    transform: translateY(-50%) translateX(2px);
+}
+
 .container-text {
     max-width: 1200px;
     margin: 0 auto;

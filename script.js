@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initWeatherWidget();
     initPhotoGallery();
+    initBannerToggle();
 });
 
 // Navigation functionality
@@ -506,6 +507,79 @@ function optimizePerformance() {
 
 // Initialize performance optimizations
 document.addEventListener('DOMContentLoaded', optimizePerformance);
+
+// Banner collapse/expand functionality
+function initBannerToggle() {
+    const banner = document.querySelector('.container-banner');
+    if (!banner) return;
+
+    const closeBtn = banner.querySelector('.btn-close');
+
+    const handle = banner.querySelector('.banner-handle');
+
+    function expand() {
+        banner.classList.remove('banner-collapsed');
+        banner.setAttribute('aria-hidden', 'false');
+        banner.setAttribute('aria-expanded', 'true');
+        try { localStorage.setItem('bannerCollapsed', 'false'); } catch (e) {}
+    }
+
+    function collapse() {
+        banner.classList.add('banner-collapsed');
+        banner.setAttribute('aria-hidden', 'true');
+        banner.setAttribute('aria-expanded', 'false');
+        try { localStorage.setItem('bannerCollapsed', 'true'); } catch (e) {}
+    }
+
+    // Close button collapses the banner (stop propagation so outer click doesn't toggle immediately)
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            collapse();
+        });
+    }
+
+    // When collapsed, clicking the visible part expands it
+    // Click on the whole banner should expand only when collapsed; clicking inner controls should not bubble
+    banner.addEventListener('click', function(e) {
+        if (banner.classList.contains('banner-collapsed')) {
+            expand();
+        }
+    });
+
+    // Make the slim handle keyboard-accessible and clickable
+    if (handle) {
+        handle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            expand();
+        });
+        handle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                expand();
+            }
+        });
+    }
+
+    // Allow keyboard escape to expand if collapsed
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && banner.classList.contains('banner-collapsed')) {
+            expand();
+        }
+    });
+
+    // Initialize state from localStorage
+    try {
+        const stored = localStorage.getItem('bannerCollapsed');
+        if (stored === 'true') {
+            collapse();
+        } else if (stored === 'false') {
+            expand();
+        }
+    } catch (e) {
+        // ignore storage errors
+    }
+}
 
 // Error handling
 window.addEventListener('error', function(e) {
