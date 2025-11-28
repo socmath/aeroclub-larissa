@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initWeatherWidget();
     initPhotoGallery();
     initBannerToggle();
+    initHeroVideoObserver();
     updateMetarLinks();
 });
 
@@ -1144,4 +1145,36 @@ function initPhotoGallery() {
     } else {
         console.warn("Fancybox library not loaded. Photo gallery will not work.");
     }
+}
+
+// Hero Video Visibility Observer - pause when not visible to save resources
+function initHeroVideoObserver() {
+    const heroVideo = document.querySelector('.hero-video');
+    
+    if (!heroVideo) return;
+    
+    // Create an Intersection Observer
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Video is visible - play it
+                heroVideo.play().catch(err => {
+                    console.log('Video play failed:', err);
+                });
+            } else {
+                // Video is not visible - pause it to save resources
+                heroVideo.pause();
+            }
+        });
+    }, {
+        // Trigger when at least 25% of the video is visible
+        threshold: 0.25,
+        // Start observing slightly before the video enters viewport
+        rootMargin: '50px'
+    });
+    
+    // Start observing the hero video
+    videoObserver.observe(heroVideo);
+    
+    console.log('Hero video observer initialized - will pause when scrolled out of view');
 }
