@@ -702,7 +702,7 @@ section {
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 2rem;
     align-items: center;
 }
 
@@ -2743,7 +2743,6 @@ section {
     
     .about-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
     }
     
     .contact-content {
