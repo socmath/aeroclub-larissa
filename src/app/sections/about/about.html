@@ -1,0 +1,38 @@
+<section id="about" class="about">
+  <div class="container-text">
+    <div class="about-content">
+      <div class="about-text" appReveal>
+        <h2 class="section-title">Σχετικά με την Αερολέσχη</h2>
+        <p class="about-description">
+          Η Αερολέσχη Λάρισας ιδρύθηκε το 1975 και αποτελεί έναν από τους παλαιότερους αεραθλητικούς συλλόγους της χώρας.
+          Είναι μέλος της Ελληνικής Αεραθλητικής Ομοσπονδίας (ΕΛΑΟ) και έχει τιμηθεί το 1990 και το 2012 από την Παγκόσμια
+          Αεραθλητική Ομοσπονδία (FAI) με το <strong><em>"THE FAI GROUP DIPLOMA OF HONOUR (FOR AERONAUTICS)"</em></strong>, μία από τις
+          σημαντικότερες διεθνείς διακρίσεις στον χώρο του αεραθλητισμού.
+          <br />
+          <br />
+          Η αερολέσχη δραστηριοποιείται στα τμήματα Υπερελαφρών Πτητικών Αεραθλητικών Μηχανών (ΥΠΑΜ) και Αερομοντελισμού,
+          προσφέροντας εκπαίδευση, δράσεις και συμμετοχή σε αεραθλητικές διοργανώσεις. Οι φίλοι της αεροπορίας έχουν τη δυνατότητα να
+          γνωρίσουν τη μαγεία της πτήσης συμμετέχοντας σε πτήσεις εθισμού, απολαμβάνοντας τη μοναδική εμπειρία να αντικρίσουν
+          τη Θεσσαλική γη από ψηλά.
+        </p>
+      </div>
+
+      <div class="about-image" appReveal>
+        <div class="stacked-photos">
+          @for (photo of photos; track photo.file; let i = $index) {
+            <a
+              class="stacked-photo-link"
+              [style.--i]="i"
+              [href]="fullUrl(photo)"
+              [attr.aria-label]="'Μεγέθυνση: ' + photo.caption"
+              (click)="openPhoto($event, i)"
+            >
+              <img class="stacked-photo" [src]="thumbUrl(photo)" [alt]="photo.caption" loading="lazy" />
+            </a>
+          }
+        </div>
+        <p class="photo-hint"><mat-icon>touch_app</mat-icon> Πατήστε τις φωτογραφίες για μεγέθυνση</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,1 +1,10 @@
+node_modules
+dist
+.angular
+.git
+.vscode
 fly.toml
+Dockerfile
+.dockerignore
+npm-debug.log
+README.md

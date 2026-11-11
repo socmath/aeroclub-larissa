@@ -1,0 +1,127 @@
+:host {
+  display: block;
+}
+
+.contact {
+  background: var(--app-surface-alt);
+  padding: 5rem 0;
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  min-height: 20rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contact-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+
+  mat-icon {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.contact-details {
+  h4 {
+    color: var(--app-primary-deep);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+.contact-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.contact-value {
+  color: var(--app-text-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--app-primary);
+    text-decoration: underline;
+  }
+}
+
+.copy-btn {
+  --mat-icon-button-icon-color: #7299ed;
+  --mat-icon-button-state-layer-size: 36px;
+  --mat-icon-button-touch-target-display: none;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+
+  .mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.map-wrapper {
+  flex: 1 1 auto;
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 0 16px 4px #00000020;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact {
+    padding: 3rem 0;
+  }
+}

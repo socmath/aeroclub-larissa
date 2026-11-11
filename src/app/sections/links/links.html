@@ -1,0 +1,20 @@
+<section id="links" class="links">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Χρήσιμοι Σύνδεσμοι</h2>
+    </div>
+
+    <div class="links-container">
+      <div class="links-card">
+        @for (category of categories; track category.title) {
+          <div class="panel">
+            <h4 class="panel-title"><mat-icon>{{ category.icon }}</mat-icon> {{ category.title }}</h4>
+            <div class="panel-body">
+              <app-link-list [links]="category.links" />
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

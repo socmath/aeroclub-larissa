@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.links {
+  padding: 5rem 0;
+}
+
+.links-container {
+  display: flex;
+  justify-content: center;
+}
+
+.links-card {
+  display: grid;
+  gap: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1000px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@media (max-width: 768px) {
+  .links-card {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .links {
+    padding: 3rem 0;
+  }
+
+  .links-card {
+    padding: 1rem;
+  }
+}

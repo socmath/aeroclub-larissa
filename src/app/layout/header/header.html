@@ -1,0 +1,41 @@
+<mat-toolbar class="header" [class.scrolled]="scroll.scrolled()">
+  <div class="nav-container">
+    <a class="nav-logo" href="#home" (click)="go($event, 'home')" aria-label="Αερολέσχη Λάρισας - Αρχική">
+      <img src="assets/aeroclub-logo.svg" alt="Aeroclub Larissa Logo" class="logo" width="72" height="72">
+      <span class="nav-logo-text">ΑΕΡΟΛΕΣΧΗ ΛΑΡΙΣΑΣ</span>
+    </a>
+
+    <nav class="nav-menu" aria-label="Κύρια πλοήγηση">
+      @for (s of sections; track s.id) {
+        <a
+          mat-button
+          class="nav-link"
+          [class.active]="scroll.activeSection() === s.id"
+          [attr.aria-current]="scroll.activeSection() === s.id ? 'location' : null"
+          [href]="'#' + s.id"
+          (click)="go($event, s.id)"
+        >{{ s.label }}</a>
+      }
+    </nav>
+
+    <button
+      mat-icon-button
+      class="menu-button"
+      type="button"
+      [matMenuTriggerFor]="mobileMenu"
+      aria-label="Μενού πλοήγησης"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #mobileMenu="matMenu" xPosition="before">
+      @for (s of sections; track s.id) {
+        <a
+          mat-menu-item
+          [class.active]="scroll.activeSection() === s.id"
+          [href]="'#' + s.id"
+          (click)="go($event, s.id)"
+        >{{ s.label }}</a>
+      }
+    </mat-menu>
+  </div>
+</mat-toolbar>

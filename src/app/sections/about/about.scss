@@ -1,0 +1,123 @@
+@use 'sass:list';
+
+:host {
+  display: block;
+}
+
+.about {
+  padding: 5rem 0;
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.section-title {
+  text-align: center;
+}
+
+.about-description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.about-image {
+  position: relative;
+}
+
+.stacked-photos {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  transform: translateX(-24px);
+}
+
+.stacked-photo-link {
+  position: absolute;
+  display: block;
+  width: 280px;
+  height: 180px;
+  border: 6px solid #fff;
+  border-bottom: 12px solid #fff;
+  border-radius: 2px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-10px) scale(1.05) rotate(0deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    z-index: 999 !important;
+  }
+}
+
+.stacked-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+// [top, left, rotation, z-index] for each photo in the pile
+$pile: (
+  (0, 0, -8deg, 15),
+  (40px, 60px, 5deg, 3),
+  (80px, 20px, -3deg, 2),
+  (120px, 80px, 7deg, 1),
+  (10px, 40px, -12deg, 5),
+  (50px, 10px, 8deg, 6),
+  (90px, 70px, -4deg, 7),
+  (130px, 30px, 11deg, 8),
+  (20px, 90px, -15deg, 9),
+  (60px, 50px, 6deg, 10),
+  (100px, 0, -9deg, 11),
+  (140px, 60px, 4deg, 12),
+  (30px, 20px, -6deg, 13),
+  (70px, 100px, 9deg, 14)
+);
+
+@for $n from 1 through list.length($pile) {
+  $p: list.nth($pile, $n);
+  // :where() keeps specificity low so the hover transform above wins
+  .stacked-photo-link:where(:nth-child(#{$n})) {
+    top: list.nth($p, 1);
+    left: list.nth($p, 2);
+    transform: rotate(list.nth($p, 3));
+    z-index: list.nth($p, 4);
+  }
+}
+
+.photo-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 3rem 0 -1rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  mat-icon {
+    color: var(--app-primary);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 3rem 0;
+  }
+}

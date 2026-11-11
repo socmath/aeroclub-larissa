@@ -1,0 +1,71 @@
+<section id="contact" class="contact">
+  <div class="container-text">
+    <div class="section-header">
+      <h2 class="section-title">Επικοινωνία</h2>
+    </div>
+
+    <div class="contact-content">
+      <div class="contact-info">
+        <div class="contact-item" appReveal>
+          <div class="contact-icon"><mat-icon>place</mat-icon></div>
+          <div class="contact-details">
+            <h4>Τοποθεσία</h4>
+            <p>Πεδίο Τερψιθέας<br />41500 Λάρισα</p>
+          </div>
+        </div>
+
+        <div class="contact-item" appReveal>
+          <div class="contact-icon"><mat-icon>phone</mat-icon></div>
+          <div class="contact-details">
+            <h4>Τηλέφωνο</h4>
+            <p class="contact-line">
+              <a class="contact-value" [href]="'tel:' + phone.replaceAll(' ', '')">{{ phone }}</a>
+              <button
+                mat-icon-button
+                type="button"
+                class="copy-btn"
+                aria-label="Αντιγραφή τηλεφώνου"
+                title="Αντιγραφή τηλεφώνου"
+                (click)="copy('phone', phone)"
+              >
+                <mat-icon>{{ copied() === 'phone' ? 'check' : 'content_copy' }}</mat-icon>
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-item" appReveal>
+          <div class="contact-icon"><mat-icon>email</mat-icon></div>
+          <div class="contact-details">
+            <h4>Email</h4>
+            <p class="contact-line">
+              <a class="contact-value" [href]="'mailto:' + email">{{ email }}</a>
+              <button
+                mat-icon-button
+                type="button"
+                class="copy-btn"
+                aria-label="Αντιγραφή email"
+                title="Αντιγραφή email"
+                (click)="copy('email', email)"
+              >
+                <mat-icon>{{ copied() === 'email' ? 'check' : 'content_copy' }}</mat-icon>
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-container">
+        <div class="map-wrapper">
+          <iframe
+            [src]="mapUrl"
+            title="Google Map - Aeroclub Larissa (39.6552, 22.3408)"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

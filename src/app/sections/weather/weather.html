@@ -1,0 +1,160 @@
+<section id="weather" class="weather">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Καιρικές Συνθήκες</h2>
+    </div>
+
+    <div class="weather-container">
+      <div class="weather-card">
+        <div class="weather-widget">
+          <!-- Current conditions -->
+          <div class="panel">
+            <h4 class="panel-title"><mat-icon>wb_cloudy</mat-icon> Τρέχουσες Καιρικές Συνθήκες (4ZTER)</h4>
+            <div class="panel-body" aria-live="polite">
+              @switch (state().status) {
+                @case ('loading') {
+                  <div class="loading">
+                    <mat-spinner diameter="24" />
+                    <span>Φόρτωση μετεωρολογικών δεδομένων...</span>
+                  </div>
+                }
+                @case ('error') {
+                  <div class="weather-fallback">
+                    <div class="fallback-header">
+                      <mat-icon>warning</mat-icon>
+                      <h4>Καιρικά δεδομένα δεν διαθέσιμα</h4>
+                    </div>
+                    <p>Για επίσημα αεροναυτικά δεδομένα METAR/TAF χρησιμοποιήστε τον παρακάτω σύνδεσμο.</p>
+                  </div>
+                }
+                @case ('ok') {
+                  @if (weather(); as w) {
+                    <div class="weather-timestamp">
+                      <mat-icon>schedule</mat-icon>
+                      Ενημέρωση: {{ timestamp(w.updatedAt) }}
+                    </div>
+
+                    <div class="weather-current">
+                      <div class="weather-main">
+                        <div class="temperature-display">
+                          <span class="temp-current">{{ w.temperature }}°C</span>
+                          <div class="temp-range">
+                            <span>↓ {{ w.todayMin }}°</span>
+                            <span>↑ {{ w.todayMax }}°</span>
+                          </div>
+                        </div>
+                        @if (condition(); as c) {
+                          <div class="weather-description">
+                            <mat-icon class="condition-icon" [style.color]="c.color">{{ c.icon }}</mat-icon>
+                            {{ c.label }}
+                          </div>
+                        }
+                      </div>
+
+                      <div class="weather-details">
+                        <div class="detail-item">
+                          <mat-icon>air</mat-icon>
+                          <span class="label">Άνεμος</span>
+                          <span class="value">{{ w.windDirection }}° {{ w.windMs }} m/s ({{ w.windKnots }} kts)</span>
+                        </div>
+                        <div class="detail-row">
+                          @if (w.visibilityKm !== null) {
+                            <div class="detail-item">
+                              <mat-icon>visibility</mat-icon>
+                              <span class="label">Ορατότητα</span>
+                              <span class="value">
+                                {{ w.visibilityKm >= 10 ? '10+' : (w.visibilityKm.toFixed(1)) }} km
+                              </span>
+                            </div>
+                          }
+                          <div class="detail-item">
+                            <mat-icon>water_drop</mat-icon>
+                            <span class="label">Βροχόπτωση</span>
+                            <span class="value">{{ w.precipitationMm }} mm</span>
+                          </div>
+                        </div>
+                        <div class="detail-row">
+                          <div class="detail-item">
+                            <mat-icon>wb_sunny</mat-icon>
+                            <span class="label">Ανατολή</span>
+                            <span class="value">{{ time(w.sunrise) }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <mat-icon>nights_stay</mat-icon>
+                            <span class="label">Δύση</span>
+                            <span class="value">{{ time(w.sunset) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="weather-source">
+                      <mat-icon>info</mat-icon>
+                      Πηγή: OpenMeteo Weather API (Γενικές καιρικές συνθήκες)
+                    </div>
+                  }
+                }
+              }
+            </div>
+          </div>
+
+          <!-- METAR / TAF -->
+          <div class="panel">
+            <h4 class="panel-title"><mat-icon>flight</mat-icon> Αεροναυτικά Δεδομένα METAR/TAF (LGLR)</h4>
+            <div class="panel-body">
+              <a
+                class="metar-link"
+                [href]="metarLiveUrl()"
+                target="metar_live_window"
+                rel="noopener noreferrer"
+                (click)="onMetarLiveClick($event)"
+              >
+                <img src="assets/windsock.svg" alt="" class="metar-icon" width="32" height="32" />
+                <div class="metar-text">
+                  <span class="metar-title">METAR-TAF.com</span>
+                  <span class="metar-desc">METAR/TAF για το αεροδρόμιο της Λάρισας (LGLR)</span>
+                </div>
+                <mat-icon class="external-icon">open_in_new</mat-icon>
+              </a>
+            </div>
+          </div>
+
+          <!-- Meteorological services -->
+          <div class="panel">
+            <h4 class="panel-title"><mat-icon>cloud</mat-icon> Μετεωρολογικές Υπηρεσίες</h4>
+            <div class="panel-body">
+              <app-link-list [links]="meteoLinks" />
+            </div>
+          </div>
+
+          <!-- Basic VFR assessment -->
+          <div class="panel">
+            <h4 class="panel-title"><mat-icon>flight</mat-icon> Βασική Αξιολόγηση VFR</h4>
+            <div class="panel-body">
+              @if (vfr(); as v) {
+                <div class="vfr-status" [class]="v.status">
+                  <div class="vfr-status-header">
+                    <mat-icon>{{ v.isDaylight ? 'wb_sunny' : 'nights_stay' }}</mat-icon>
+                    <span class="vfr-status-title">VFR Πτήσεις</span>
+                  </div>
+                  <div class="vfr-status-result">{{ v.title }}</div>
+                  <div class="vfr-status-details">{{ v.details }}</div>
+                </div>
+              } @else if (state().status === 'error') {
+                <div class="vfr-status check-required">
+                  <div class="vfr-status-result">Άγνωστο</div>
+                  <div class="vfr-status-details">Χρησιμοποιήστε επίσημα METAR/TAF για ακριβή ανάλυση</div>
+                </div>
+              } @else {
+                <div class="loading">
+                  <mat-spinner diameter="24" />
+                  <span>Επεξεργασία δεδομένων...</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
