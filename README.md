@@ -36,6 +36,18 @@ public/assets/     logos, images, hero video
 
 Content lives next to the components that render it: gallery photos in `sections/about/gallery.data.ts`, link categories in `sections/links/links.ts`, contact details in `sections/contact/contact.ts`.
 
+## Cookie consent & Google Tag Manager
+
+Google Tag Manager is **opt-in**: nothing is loaded and no cookies are set until the visitor clicks "Αποδοχή" in the cookie banner. The app uses Consent Mode v2 (all storage `denied` by default, `analytics_storage` set to `granted` on accept), so tags such as GA4 should be configured in GTM to require analytics consent. The choice is stored in `localStorage` for 12 months and can be changed from the "Ρυθμίσεις cookies" link in the footer; withdrawing consent updates Consent Mode to `denied` and deletes the `_ga*` cookies.
+
+Do not paste the GTM snippet into `src/index.html`; the app injects it after consent. The container ID is set in `src/app/core/consent/analytics.config.ts`:
+
+```ts
+export const GTM_CONTAINER_ID_VALUE = 'GTM-XXXXXXX';
+```
+
+While the ID is empty, the banner and footer link are hidden and no Google script is ever requested.
+
 ## Deploying to Fly.io
 
 The app is configured in `fly.toml` (`aeroclub-larissa`); the `Dockerfile` builds the Angular app and serves it with nginx on port 8080 (`nginx.conf` handles SPA routing and caching).

@@ -45,3 +45,19 @@
     color: #cbd5e1;
   }
 }
+
+.cookie-settings {
+  margin-top: 0.5rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: #93c5fd;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+}

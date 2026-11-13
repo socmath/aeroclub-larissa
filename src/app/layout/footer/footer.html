@@ -26,6 +26,9 @@
 
     <div class="footer-bottom">
       <p>&copy; {{ year }} Αερολέσχη Λάρισας. Με την επιφύλαξη παντός δικαιώματος.</p>
+      @if (consent.analyticsConfigured) {
+        <button type="button" class="cookie-settings" (click)="consent.reopen()">Ρυθμίσεις cookies</button>
+      }
     </div>
   </div>
 </footer>
